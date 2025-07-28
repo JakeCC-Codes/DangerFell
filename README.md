@@ -3,7 +3,7 @@
 Basically just flappy bird but with a gun.
 
 Free Fall through a dangerous dungeon while avoiding all obstacles in your way. With only one life, beat all bosses and obtain the highest score to win.
-Can you survive?
+Will you survive?
 
 -----> by JakeCCz <-----
 

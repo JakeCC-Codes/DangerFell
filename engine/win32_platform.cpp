@@ -64,7 +64,7 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
         QueryPerformanceFrequency(&perf);
         performance_frequency = (float)perf.QuadPart;
     }
-    //PlaySound(TEXT("assets\\music\\DangerFell.wav"), NULL, SND_LOOP | SND_ASYNC); // Music
+    PlaySound(TEXT("assets\\music\\DangerFell.wav"), NULL, SND_LOOP | SND_ASYNC); // Music
     
     //Game Loop
     while (window_running) {

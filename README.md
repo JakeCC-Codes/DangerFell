@@ -1,5 +1,4 @@
--------->= **DangerFell** =<--------
-**by JakeCCz**
+# -------->= DangerFell =<-------- [by JakeCCz]
 
 Basically just flappy bird but with a gun.
 

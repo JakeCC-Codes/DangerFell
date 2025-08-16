@@ -11,7 +11,7 @@ enum VKeyEventType {
 
 class Input {
     public:
-    static vector<Sprite*> spriteRegistry;
+    static std::vector<Sprite*> spriteRegistry;
     static VKeyEventType VKeyEvent(keyCode vk_code, bool is_pressed);
 
     static void Input_ButtonDown(keyCode vk_code);
@@ -29,6 +29,6 @@ class Input {
     static void DestroySpriteInstance(Sprite* ptr);
 
     private:
-    static set<u32> activeVKeyCodes;
+    static std::set<u32> activeVKeyCodes;
     static bool register_entries;
 };

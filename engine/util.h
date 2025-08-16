@@ -3,7 +3,7 @@
 #include <iostream>
 #include <windows.h>
 #include <vector>
-using namespace std;
+using std::string;
 
 typedef char s8;
 typedef unsigned char u8;
@@ -14,7 +14,6 @@ typedef unsigned int u32;
 typedef long long s64;
 typedef unsigned long long u64;
 #define null NULL;
-#define PI 3.14159265358979323846;
 struct RenderStateBuffer { int width, height; void* memory; BITMAPINFO bitmapInfo; float aspectRatio, aspectRatioInverse; };
 extern RenderStateBuffer buffer;
 extern Vector2 borderOffset;

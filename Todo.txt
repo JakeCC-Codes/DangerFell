@@ -1,0 +1,15 @@
+Level1 FBlock Spawn is actually broken xD
+
+I got like 15 blocks in a row
+
+Add tweens cause desync issues
+
+Add upgrades for gun pew pew
+
+Make gun a 2 shot kill
+
+Fix fps 
+
+Use a better texture renderer that supports sprite sheets
+
+Fix Tween in Wall.cpp

@@ -19,11 +19,20 @@ FBlock::FBlock(float moveSpeed, Vector2 size, Vector2 pos):blockSpeed(moveSpeed)
     blockHealth = blockMaxHealth;
     float boundaryOffset = getBoundaryOffset(blockSize.x*2);
     blockPos = pos == NULL ? Vector2(Math::getRandomFloat(boundaryOffset, 100.f - boundaryOffset), -blockSize.y) : pos;
+    if ((int)Math::getRandomFloat(0.f, 1.2f) == 1) {
+        float endPos = Math::getRandomFloat(10, 30);
+        float distance = endPos - blockPos.y;
+        blockTween = new Tween(&blockPos.y,  endPos, distance/blockSpeed *2.f, Tween::EASEOUTSINE);
+    } else {
+        float endPos = 100 + blockSize.y;
+        float distance = endPos - blockPos.y;
+        blockTween = new Tween(&blockPos.y,  endPos, distance/blockSpeed, Tween::EASEINQUAD);
+    }
 }
 
 float FBlock::Damage(float amount) {
-    if (blockHealth - amount == 0) {
-        accel = 4.f;
+    if (blockHealth - amount <= 0) {
+        blockTween->isStopped = true;
     }
     if (damageTimer < 0.02f && blockHealth > 0) {
         float damageDrawback = blockHealth;
@@ -51,15 +60,17 @@ void FBlock::_TimerProcess(float deltaTime) {
 void FBlock::_process(float deltaTime) {
     if (blockPos.y >= 100 + blockSize.y) {
         //Destroy
+        blockTween->isStopped = true;
         Sprite::DestroyInstance(this);
         return;
     }
+
+    if (blockTween->isStopped && blockPos.y < 33 && blockHealth > 0) {
+        float endPos = 175 + blockSize.y;
+        float distance = endPos - blockPos.y;
+        blockTween = new Tween(&blockPos.y, endPos,distance/blockSpeed, Tween::EASEINBACK);
+    }
     
-    if (blockPos.y >= 30)
-        accel += Math::lerp(2.f, accel, 100.f);
-    else if (blockPos.y >= 10)
-        accel += Math::lerp(0.05f, accel, 60.f);
-    blockPos.y += blockSpeed * deltaTime * gameplay_running * accel;
     if (offsetVTimer <= 0.00f) {
         offsetVTimer = 0.06f;
         offsetVisual = Vector2(Math::getRandomFloat(-blockSize.x*0.05, blockSize.x*0.05) * buffer.aspectRatioInverse, Math::getRandomFloat(-blockSize.y*0.075, blockSize.y*0.075));

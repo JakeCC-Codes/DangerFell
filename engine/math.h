@@ -3,6 +3,7 @@
 #include <random>
 #include <sstream>
 #include <algorithm>
+#include <cmath>
 
 class Vector2 {
     public:
@@ -11,16 +12,21 @@ class Vector2 {
     constexpr Vector2(float x, float y=0):x(x),y(y){};
 
     std::string toString() {std::stringstream ss; ss<<"("<<this->x<<", "<<this->y<<")"; return ss.str();};
+    constexpr Vector2 asInt() {return Vector2(static_cast<int>(this->x), static_cast<int>(this->y));};
 
     //Vector Maths
     constexpr friend Vector2 operator/(const Vector2 &v1, const float &num) { return Vector2(v1.x / num, v1.y / num);};
+    constexpr friend Vector2 operator/(const float &num, const Vector2 &v1) { return Vector2(num / v1.x, num / v1.y);};
     constexpr friend Vector2 operator*(const Vector2 &v1, const float &num) { return Vector2(v1.x * num, v1.y * num);};
+    constexpr friend Vector2 operator*(const float &num, const Vector2 &v1) { return Vector2(num * v1.x, num * v1.y);};
     
     constexpr friend Vector2 operator/(const Vector2 &v1, const Vector2 &v2) { return Vector2(v1.x / v2.x, v1.y / v1.y);};
     constexpr friend Vector2 operator*(const Vector2 &v1, const Vector2 &v2) { return Vector2(v1.x * v2.x, v1.y * v2.y);};
     constexpr friend Vector2 operator+(const Vector2 &v1, const Vector2 &v2) { return Vector2(v1.x + v2.x, v1.y + v2.y);};
     constexpr friend Vector2 operator-(const Vector2 &v1, const Vector2 &v2) { return Vector2(v1.x - v2.x, v1.y - v2.y);};
 
+    constexpr Vector2 & operator/=(const float &num) { x /= num; y /= num; return *this;};
+    constexpr Vector2 & operator*=(const float &num) { x *= num; y *= num; return *this;};
     constexpr Vector2 & operator/=(const Vector2 &v2) { x /= v2.x; y /= v2.y; return *this;};
     constexpr Vector2 & operator*=(const Vector2 &v2) { x *= v2.x; y *= v2.y; return *this;};
     constexpr Vector2 & operator+=(const Vector2 &v2) { x += v2.x; y += v2.y; return *this;};
@@ -33,6 +39,7 @@ class Vector2 {
 };
 
 namespace Math {
+    constexpr double PI = 3.14159265358979323846;
     constexpr float clamp(float min, float val, float max) {
         if (min > max) std::swap(min, max); // Flip if negative
         if (val < min) {return min;}
@@ -67,5 +74,20 @@ namespace Math {
     }
     inline Vector2 lerp(Vector2 finalVal, Vector2 initVal, float time) {
         return (finalVal - initVal) / time;
+    }
+    template<typename num> inline num powLITE(num x, int pow) { // Power function LITE
+        num result = x * (pow != 0) + (pow == 0);
+        for (int i=1; i<pow; i++) {
+            result *= x;
+        }
+        return result;
+    }
+
+    template<typename num> inline num floorDecimal(num x) {
+        return x - std::floor(x);
+    }
+
+    template<typename num, typename num2> inline auto maxLITE(num a, num2 b) {
+        return (((a) > (b)) ? (a) : (b));
     }
 }

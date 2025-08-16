@@ -3,10 +3,11 @@
 #include "../../engine/utilClasses.h"
 
 
-enum BulletTypes { customType, smallShotType, mediumShotType, bigShotType };
-struct BulletType { float damage, speed; };
-const BulletType smallShot = {3.f, 350.f};
-const BulletType bigShot = {14.f, 225.f};
+enum BulletTypes { customType, smallShotType, midShotType, bigShotType };
+struct BulletType { float damage, speed; BulletTypes type=customType; };
+const BulletType smallShot = {3.f, 350.f, smallShotType};
+const BulletType midShot = {6.f, 225.f, midShotType};
+const BulletType bigShot = {14.f, 225.f, bigShotType};
 
 class Player : public Sprite {
     protected:
@@ -62,7 +63,7 @@ class Wall : public Sprite {
     float wallMoveSpeed = defaultScrollSpeed;
     float wallSpacing;
     float wallOffset;
-    const float barrierMaxHealth = 9.f; // 3 smallShots kill
+    const float barrierMaxHealth = 6.f; // 2 smallShots kill
     float barrierHealth = barrierMaxHealth;
     bool pointAwarded = false;
 
@@ -74,6 +75,7 @@ class Wall : public Sprite {
     float Damage(float amount);
 
     private:
+    bool isMoving = true; // Fix
     float moveTimer = 0.00f;
     float damageTimer = 0.00f; // 0.04f seconds
     inline void _TimerProcess(float deltaTime);
@@ -99,6 +101,7 @@ class FBlock : public Sprite {
     float Damage(float amount);
 
     private:
+    Tween* blockTween;
     Vector2 offsetVisual;
     float offsetVTimer = 0.00f;
     float damageTimer = 0.00f; // 0.04f seconds

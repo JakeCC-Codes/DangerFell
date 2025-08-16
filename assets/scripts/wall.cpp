@@ -7,7 +7,7 @@ float wallMoveSpeed = defaultScrollSpeed;
 float wallSpacing;
 float wallOffset;
 
-const float barrierMaxHealth = 9.f; // 3 smallShots kill
+const float barrierMaxHealth = 6.f; // 2 smallShots kill
 float barrierHealth = barrierMaxHealth;
 
 // bool pointAwarded = false;
@@ -26,6 +26,11 @@ Wall::Wall(float moveDelay, float blockChance, float spaceSize, float moveSpeed)
         moveTimer = moveDelay;
         wallMoveSpeed *= 3.f;
         wallPos.y = wallSize.y;
+    } else {
+        float endPos = 100 + wallSize.y;
+        float distance = endPos - wallPos.y;
+        new Tween(&wallPos.y,  endPos, (distance/wallMoveSpeed), Tween::EASEINOUTCUSTOM1);// Change me lol
+        isMoving = false;
     }
 }
 
@@ -60,7 +65,7 @@ void Wall::_process(float deltaTime) {
         return;
     }
     
-    wallPos.y += wallMoveSpeed * deltaTime * (moveTimer <= 0.f && gameplay_running);
+    wallPos.y += wallMoveSpeed * deltaTime * (moveTimer <= 0.f && gameplay_running && isMoving);
     drawRect(wallPos - Vector2(wallOffset * buffer.aspectRatioInverse), wallSize, 0x600026, &buffer);
     drawRect(wallPos + Vector2(wallOffset * buffer.aspectRatioInverse), wallSize, 0x600026, &buffer);
     if (barrierHealth > 0 || damageTimer > 0.02f) {

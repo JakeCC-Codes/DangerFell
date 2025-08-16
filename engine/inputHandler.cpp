@@ -1,6 +1,6 @@
 #include "inputHandler.h"
 
-set<u32> Input::activeVKeyCodes;
+std::set<u32> Input::activeVKeyCodes;
 std::vector<Sprite*> Input::spriteRegistry;
 
 int Input::IsKeyPressed(keyCode key) {

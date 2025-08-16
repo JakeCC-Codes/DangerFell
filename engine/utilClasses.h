@@ -9,6 +9,8 @@
 #include <memory>
 #include "math.h"
 #include "external/stb_image.h"
+#include <map>
+#include <functional>
 
 typedef unsigned int keyCode;
 
@@ -154,4 +156,110 @@ class ImageFile {
 
     private:
     static std::vector<ImageFile*> registry;
+};
+
+class Tween {
+    public:
+    enum TweenMode {
+        LINEAR,
+        EASEINSINE,
+        EASEOUTSINE,
+        EASEINOUTSINE,
+        EASEINQUAD,
+        EASEOUTQUAD,
+        EASEINOUTQUAD,
+        EASEINCUBIC,
+        EASEOUTCUBIC,
+        EASEINOUTCUBIC,
+        EASEINQUART,
+        EASEOUTQUART,
+        EASEINOUTQUART,
+        EASEINQUINT,
+        EASEOUTQUINT,
+        EASEINOUTQUINT,
+        EASEINEXPO,
+        EASEOUTEXPO,
+        EASEINOUTEXPO,
+        EASEINCIRC,
+        EASEOUTCIRC,
+        EASEINOUTCIRC,
+        EASEINBACK,
+        EASEOUTBACK,
+        EASEINOUTBACK,
+        EASEINELASTIC,
+        EASEOUTELASTIC,
+        EASEINOUTELASTIC,
+        EASEINBOUNCE,
+        EASEOUTBOUNCE,
+        EASEINOUTBOUNCE,
+        EASEINOUTCUSTOM1,
+        EASEINCIRCH,
+        EASEINOUTPEAKABOO
+    };
+    bool isPaused = false;
+    bool isStopped = false;
+    std::function<float(float)> tweenLambda;
+    Tween(float* var, float final, float time, TweenMode mode = LINEAR) {
+        this->progressMaxTime = time;
+        this->tweenLambda = tweenMap.at(mode);
+        this->lpFloat = var;
+        this->initVal = *var;
+        this->finalVal = final;
+        this->selectedType = TpFLOAT;
+        Tween::registry.push_back(this);
+    }
+    Tween(Vector2* var, Vector2 final, float time, TweenMode mode = LINEAR) {
+        this->progressMaxTime = time;
+        this->tweenLambda = tweenMap.at(mode);
+        this->lpVector2 = var;
+        this->initVecVal = *var;
+        this->finalVecVal = final;
+        this->selectedType = TpVECTOR2;
+        Tween::registry.push_back(this);
+    }
+    ~Tween() {
+        auto it = std::remove(registry.begin(), registry.end(), this);
+        registry.erase(it, registry.end());
+    }
+    // Start
+    // Pause
+    // Stop
+
+    static void fireAllProcesses(float deltaTime) {
+        std::vector<Tween*> activeTweens;
+        activeTweens.reserve(registry.size());
+        for (Tween* s : Tween::registry) {
+            activeTweens.push_back(s);
+        }
+
+        for (Tween* tweenInstance : activeTweens) {
+            if (tweenInstance->isStopped) {
+                delete tweenInstance;
+            } else {
+                tweenInstance->_process(deltaTime);
+            }
+        }
+    }
+
+    constexpr float getProgress() { return progress; } // read-only
+
+    protected:
+    void _process(float deltaTime);
+    
+    private:
+    float progress = 0.f; // 0 - 1
+    float progressMaxTime = 0.f;
+    float progressTimer = 0.00f;
+
+    enum AllowedTypes {TpFLOAT, TpVECTOR2};
+    AllowedTypes selectedType;
+
+    float* lpFloat;
+    float initVal;
+    float finalVal;
+    Vector2* lpVector2;
+    Vector2 initVecVal;
+    Vector2 finalVecVal;
+    static std::vector<Tween*> registry;
+    static const std::map<TweenMode, std::function<float(float)>> tweenMap;
 };

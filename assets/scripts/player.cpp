@@ -9,6 +9,9 @@ float bulletSizeModifier = 0;
 float bulletMaxSize = 4.75f;
 
 Vector2 Velocity = 0.f;
+// The time it takes for the player to regen ammo is a variable,
+// use it to regen ammo faster once smaller shots are shot vs
+// bigger ones, except when out of ammo completely.
 
 Player::Player(Vector2 pos, Vector2 size):playerPos(pos), playerSize(size), playerSizeOriginal(size) { Input::spriteRegistry.push_back(this); };
 
@@ -18,7 +21,7 @@ void Player::_process(float deltaTime) {
         switch(keyCode) {
             case VK_SPACE:
             case 'Z': {
-                if (playerSize.x > playerSizeOriginal.x*0.45) speed *= 1.f/((bulletSizeModifier *0.25f) +1.f);
+                if (playerSize.x > playerSizeOriginal.x*0.45) speed *= (bulletMaxSize - bulletSizeModifier*0.3f)/bulletMaxSize;
                 resizeTimer = 0.54f;
                 bulletSizeModifier += 0.15f;
                 bulletSizeModifier = Math::clamp(0, bulletSizeModifier, bulletMaxSize);
@@ -70,9 +73,10 @@ void Player::Input_ButtonUp(keyCode vk_code) { //When shoot you shake character 
     switch(vk_code) { // Known bug when holding down 2 keys you don't reset timer
         case VK_SPACE:
         case 'Z': {
-            bulletSizeModifier = Math::round(bulletSizeModifier, bulletMaxSize/2.f);
-            if (playerSize.x > playerSizeOriginal.x*0.45) {
-                Sprite::registry.insert(Sprite::registry.begin(), std::make_unique<Bullet>(playerPos, Vector2(2 + bulletSizeModifier, 5 + bulletSizeModifier), bulletSizeModifier >= bulletMaxSize/2.f ? bigShot.speed : smallShot.speed, bulletSizeModifier == bulletMaxSize ? bigShot.damage : smallShot.damage, bulletSizeModifier >= bulletMaxSize/2.f ? bigShotType : smallShotType));
+            bulletSizeModifier = Math::round(bulletSizeModifier, bulletMaxSize*0.5f);
+            BulletType bulletStats = bulletSizeModifier >= bulletMaxSize ? bigShot : (bulletSizeModifier >= bulletMaxSize*0.5f ? midShot : smallShot);
+            if (playerSize.x > playerSizeOriginal.x*0.45f) {
+                Sprite::registry.insert(Sprite::registry.begin(), std::make_unique<Bullet>(playerPos, Vector2(2 + bulletSizeModifier, 5 + bulletSizeModifier), bulletStats.speed, bulletStats.damage, bulletStats.type));
                 playerSize.x *= 1.25f;
             } else {
                 playerSize.x *= 1.1f;
@@ -118,7 +122,7 @@ void Player::_CollisionCheck() {
 void Player::_Death() {
     // Sound Effect
     gameplay_running = false;
-    cout<<GameLoop::score<<endl;
+    std::cout<<GameLoop::score<<'\n';
     Sprite::DestroyInstance(this);
     Input::DestroySpriteInstance(this);
 }

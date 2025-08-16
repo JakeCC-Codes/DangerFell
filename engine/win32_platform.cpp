@@ -15,7 +15,7 @@ RenderStateBuffer buffer;
 bool gameplay_running = true; // Freeze Time LOL
 static bool window_running = true;
 static const float window_fps = 500.f/fpsCap;
-float deltaTime, oldDT, newDT = 1.f/fpsCap;
+float deltaTime, oldDT, newDT = 1.f/fpsCap, lastRoundFPS = 0.f, fps = 0.f;
 
 Vector2 borderOffset = Vector2();
 
@@ -64,7 +64,7 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
         QueryPerformanceFrequency(&perf);
         performance_frequency = (float)perf.QuadPart;
     }
-    PlaySound(TEXT("assets\\music\\DangerFell.wav"), NULL, SND_LOOP | SND_ASYNC); // Music
+    //PlaySound(TEXT("assets\\music\\DangerFell.wav"), NULL, SND_LOOP | SND_ASYNC); // Music
     
     //Game Loop
     while (window_running) {
@@ -90,8 +90,16 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int n
             renderBackgroundColour(0xFF8F00, &buffer);
             GameLoop::fireAllProcesses(deltaTime);
             Sprite::fireAllProcesses(deltaTime);
+            Tween::fireAllProcesses(deltaTime);
             drawTexture(Vector2(0, 50), Vector2(7*buffer.aspectRatio, 103), "screen_border", &buffer, {false, false}, Vector2(borderOffset.x, borderOffset.y + 103)); //0xC05700
             drawTexture(Vector2(100, 50), Vector2(7*buffer.aspectRatio, 103), "screen_border", &buffer, {true, false}, borderOffset); //0xC05700
+            if ((int)(1.f/deltaTime *0.05f)*20 != lastRoundFPS ) {
+                lastRoundFPS = (int)(1.f/deltaTime *0.05f)*20;
+                fps = 1.f/deltaTime;
+            }
+            drawText(Vector2(16, 94), Vector2(40, 5), "FPS: " + std::to_string((int)fps), 0xEEFFEE, "font_ccsanz", &buffer);
+            drawText(Vector2(16, 88), Vector2(40, 5), "SCORE: " + std::to_string(GameLoop::score), 0xEEFFEE, "font_ccsanz", &buffer);
+            // drawText(Vector2(50, 50), Vector2(30, 15), "Hello World and friends!", 0xEEFFEE, "font_ccsanz", &buffer);
             borderOffset.y += defaultScrollSpeed * 1.5f * deltaTime * gameplay_running;
             borderOffset = Math::wrapVector2(Vector2(), borderOffset, Vector2(1.f, 200.f));
             //Make Draw Order, Sprites and Query

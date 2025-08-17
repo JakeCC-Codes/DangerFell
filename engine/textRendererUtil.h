@@ -1,0 +1,196 @@
+#pragma once
+#include <iostream>
+#include <array>
+#include <map>
+#include "math.h"
+
+const int defaultLetterPOSWidth = 4;
+const int defaultLetterPOSHeight = 7;
+const int defaultSpacePOSWidth = 2;
+
+const float defaultLetterUVWidth = 0.0625;
+const float defaultLetterUVHeight = 0.109375;
+const float defaultSpaceUVWidth = 0.03125;
+
+const float defaultLetterAspect = 0.571428571;
+const float defaultLetterAspectInverse = 1.75;
+const float defaultSpaceAspectX = 0.285714285;
+const float defaultSpaceAspectY = 3.5;
+
+const std::map<char, std::array<Vector2, 2>> defaultFontPOSMap = {
+    {'A', {Vector2(), Vector2(3, 6)}},
+    {'B', {Vector2(5), Vector2(8, 6)}},
+    {'C', {Vector2(10), Vector2(13, 6)}},
+    {'D', {Vector2(15), Vector2(18, 6)}},
+    {'E', {Vector2(20), Vector2(23, 6)}},
+    {'F', {Vector2(25), Vector2(28, 6)}},
+    {'G', {Vector2(30), Vector2(33, 6)}},
+    {'H', {Vector2(35), Vector2(38, 6)}},
+    {'I', {Vector2(40), Vector2(43, 6)}},
+    {'J', {Vector2(45), Vector2(48, 6)}},
+    {'K', {Vector2(50), Vector2(53, 6)}},
+    {'L', {Vector2(55), Vector2(58, 6)}},
+    {'M', {Vector2(60), Vector2(63, 6)}},
+
+    {'N', {Vector2(0, 8), Vector2(3, 14)}},
+    {'O', {Vector2(5, 8), Vector2(8, 14)}},
+    {'P', {Vector2(10, 8), Vector2(13, 14)}},
+    {'Q', {Vector2(15, 8), Vector2(18, 14)}},
+    {'R', {Vector2(20, 8), Vector2(23, 14)}},
+    {'S', {Vector2(25, 8), Vector2(28, 14)}},
+    {'T', {Vector2(30, 8), Vector2(33, 14)}},
+    {'U', {Vector2(35, 8), Vector2(38, 14)}},
+    {'V', {Vector2(40, 8), Vector2(43, 14)}},
+    {'W', {Vector2(45, 8), Vector2(48, 14)}},
+    {'X', {Vector2(50, 8), Vector2(53, 14)}},
+    {'Y', {Vector2(55, 8), Vector2(58, 14)}},
+    {'Z', {Vector2(60, 8), Vector2(63, 14)}},
+    
+    {'a', {Vector2(0, 16), Vector2(3, 22)}},
+    {'b', {Vector2(5, 16), Vector2(8, 22)}},
+    {'c', {Vector2(10, 16), Vector2(13, 22)}},
+    {'d', {Vector2(15, 16), Vector2(18, 22)}},
+    {'e', {Vector2(20, 16), Vector2(23, 22)}},
+    {'f', {Vector2(25, 16), Vector2(28, 22)}},
+    {'g', {Vector2(30, 16), Vector2(33, 22)}},
+    {'h', {Vector2(35, 16), Vector2(38, 22)}},
+    {'i', {Vector2(40, 16), Vector2(43, 22)}},
+    {'j', {Vector2(45, 16), Vector2(48, 22)}},
+    {'k', {Vector2(50, 16), Vector2(53, 22)}},
+    {'l', {Vector2(55, 16), Vector2(58, 22)}},
+    {'m', {Vector2(60, 16), Vector2(63, 22)}},
+
+    {'n', {Vector2(0, 24), Vector2(3, 30)}},
+    {'o', {Vector2(5, 24), Vector2(8, 30)}},
+    {'p', {Vector2(10, 24), Vector2(13, 30)}},
+    {'q', {Vector2(15, 24), Vector2(18, 30)}},
+    {'r', {Vector2(20, 24), Vector2(23, 30)}},
+    {'s', {Vector2(25, 24), Vector2(28, 30)}},
+    {'t', {Vector2(30, 24), Vector2(33, 30)}},
+    {'u', {Vector2(35, 24), Vector2(38, 30)}},
+    {'v', {Vector2(40, 24), Vector2(43, 30)}},
+    {'w', {Vector2(45, 24), Vector2(48, 30)}},
+    {'x', {Vector2(50, 24), Vector2(53, 30)}},
+    {'y', {Vector2(55, 24), Vector2(58, 30)}},
+    {'z', {Vector2(60, 24), Vector2(63, 30)}},
+
+    {'1', {Vector2(0, 32), Vector2(3, 38)}},
+    {'2', {Vector2(5, 32), Vector2(8, 38)}},
+    {'3', {Vector2(10, 32), Vector2(13, 38)}},
+    {'4', {Vector2(15, 32), Vector2(18, 38)}},
+    {'5', {Vector2(20, 32), Vector2(23, 38)}},
+    {'6', {Vector2(25, 32), Vector2(28, 38)}},
+    {'7', {Vector2(30, 32), Vector2(33, 38)}},
+    {'8', {Vector2(35, 32), Vector2(38, 38)}},
+    {'9', {Vector2(40, 32), Vector2(43, 38)}},
+    {'.', {Vector2(45, 32), Vector2(48, 38)}},
+    {':', {Vector2(50, 32), Vector2(53, 38)}},
+    {'!', {Vector2(55, 32), Vector2(58, 38)}},
+    {'?', {Vector2(60, 32), Vector2(63, 38)}},
+
+    {'=', {Vector2(0, 40), Vector2(3, 56)}},
+    {'-', {Vector2(5, 40), Vector2(8, 56)}},
+    {'/', {Vector2(10, 40), Vector2(13, 56)}},
+    {'*', {Vector2(15, 40), Vector2(18, 56)}},
+    {'(', {Vector2(20, 40), Vector2(23, 56)}},
+    {')', {Vector2(25, 40), Vector2(28, 56)}},
+    {'%', {Vector2(30, 40), Vector2(33, 56)}},
+    {'$', {Vector2(35, 40), Vector2(38, 56)}},
+    {'<', {Vector2(40, 40), Vector2(43, 56)}},
+    {'>', {Vector2(45, 40), Vector2(48, 56)}},
+    {'\'', {Vector2(50, 40), Vector2(53, 56)}},
+    {'~', {Vector2(55, 40), Vector2(58, 56)}},
+    {'@', {Vector2(60, 40), Vector2(63, 56)}},
+
+    {' ', {Vector2(0, 47), Vector2(3, 53)}},
+    {'0', {Vector2(5, 8), Vector2(8, 14)}}
+};
+
+const std::map<char, std::array<Vector2, 2>> defaultFontUVMap = {
+    {'A', {Vector2(), Vector2(0.046875, 0.09375)}},
+    {'B', {Vector2(0.078125), Vector2(0.125, 0.09375)}},
+    {'C', {Vector2(0.15625), Vector2(0.203125, 0.09375)}},
+    {'D', {Vector2(0.234375), Vector2(0.28125, 0.09375)}},
+    {'E', {Vector2(0.3125), Vector2(0.359375, 0.09375)}},
+    {'F', {Vector2(0.390625), Vector2(0.4375, 0.09375)}},
+    {'G', {Vector2(0.46875), Vector2(0.515625, 0.09375)}},
+    {'H', {Vector2(0.546875), Vector2(0.59375, 0.09375)}},
+    {'I', {Vector2(0.625), Vector2(0.671875, 0.09375)}},
+    {'J', {Vector2(0.703125), Vector2(0.75, 0.09375)}},
+    {'K', {Vector2(0.78125), Vector2(0.828125, 0.09375)}},
+    {'L', {Vector2(0.859375), Vector2(0.90625, 0.09375)}},
+    {'M', {Vector2(0.9375), Vector2(0.984375, 0.09375)}},
+
+    {'N', {Vector2(0.0, 0.125), Vector2(0.046875, 0.21875)}},
+    {'O', {Vector2(0.078125, 0.125), Vector2(0.125, 0.21875)}},
+    {'P', {Vector2(0.15625, 0.125), Vector2(0.203125, 0.21875)}},
+    {'Q', {Vector2(0.234375, 0.125), Vector2(0.28125, 0.21875)}},
+    {'R', {Vector2(0.3125, 0.125), Vector2(0.359375, 0.21875)}},
+    {'S', {Vector2(0.390625, 0.125), Vector2(0.4375, 0.21875)}},
+    {'T', {Vector2(0.46875, 0.125), Vector2(0.515625, 0.21875)}},
+    {'U', {Vector2(0.546875, 0.125), Vector2(0.59375, 0.21875)}},
+    {'V', {Vector2(0.625, 0.125), Vector2(0.671875, 0.21875)}},
+    {'W', {Vector2(0.703125, 0.125), Vector2(0.75, 0.21875)}},
+    {'X', {Vector2(0.78125, 0.125), Vector2(0.828125, 0.21875)}},
+    {'Y', {Vector2(0.859375, 0.125), Vector2(0.90625 , 0.21875)}},
+    {'Z', {Vector2(0.9375, 0.125), Vector2(0.984375, 0.21875)}},
+    
+    {'a', {Vector2(0.0, 0.25), Vector2(0.046875, 0.34375)}},
+    {'b', {Vector2(0.078125, 0.25), Vector2(0.125, 0.34375)}},
+    {'c', {Vector2(0.15625, 0.25), Vector2(0.203125, 0.34375)}},
+    {'d', {Vector2(0.234375, 0.25), Vector2(0.28125, 0.34375)}},
+    {'e', {Vector2(0.3125, 0.25), Vector2(0.359375, 0.34375)}},
+    {'f', {Vector2(0.390625, 0.25), Vector2(0.4375, 0.34375)}},
+    {'g', {Vector2(0.46875, 0.25), Vector2(0.515625, 0.34375)}},
+    {'h', {Vector2(0.546875, 0.25), Vector2(0.59375, 0.34375)}},
+    {'i', {Vector2(0.625, 0.25), Vector2(0.671875, 0.34375)}},
+    {'j', {Vector2(0.703125, 0.25), Vector2(0.75, 0.34375)}},
+    {'k', {Vector2(0.78125, 0.25), Vector2(0.828125, 0.34375)}},
+    {'l', {Vector2(0.859375, 0.25), Vector2(0.90625, 0.34375)}},
+    {'m', {Vector2(0.9375, 0.25), Vector2(0.984375, 0.34375)}},
+
+    {'n', {Vector2(0.0, 0.375), Vector2(0.046875, 0.46875)}},
+    {'o', {Vector2(0.078125, 0.375), Vector2(0.125, 0.46875)}},
+    {'p', {Vector2(0.15625, 0.375), Vector2(0.203125, 0.46875)}},
+    {'q', {Vector2(0.234375, 0.375), Vector2(0.28125, 0.46875)}},
+    {'r', {Vector2(0.3125, 0.375), Vector2(0.359375, 0.46875)}},
+    {'s', {Vector2(0.390625, 0.375), Vector2(0.4375, 0.46875)}},
+    {'t', {Vector2(0.46875, 0.375), Vector2(0.515625, 0.46875)}},
+    {'u', {Vector2(0.546875, 0.375), Vector2(0.59375, 0.46875)}},
+    {'v', {Vector2(0.625, 0.375), Vector2(0.671875, 0.46875)}},
+    {'w', {Vector2(0.703125, 0.375), Vector2(0.75, 0.46875)}},
+    {'x', {Vector2(0.78125, 0.375), Vector2(0.828125, 0.46875)}},
+    {'y', {Vector2(0.859375, 0.375), Vector2(0.90625, 0.46875)}},
+    {'z', {Vector2(0.9375, 0.375), Vector2(0.984375, 0.46875)}},
+
+    {'1', {Vector2(0.0, 0.5), Vector2(0.046875, 0.59375)}},
+    {'2', {Vector2(0.078125, 0.5), Vector2(0.125, 0.59375)}},
+    {'3', {Vector2(0.15625, 0.5), Vector2(0.203125, 0.59375)}},
+    {'4', {Vector2(0.234375, 0.5), Vector2(0.28125, 0.59375)}},
+    {'5', {Vector2(0.3125, 0.5), Vector2(0.359375, 0.59375)}},
+    {'6', {Vector2(0.390625, 0.5), Vector2(0.4375, 0.59375)}},
+    {'7', {Vector2(0.46875, 0.5), Vector2(0.515625, 0.59375)}},
+    {'8', {Vector2(0.546875, 0.5), Vector2(0.59375, 0.59375)}},
+    {'9', {Vector2(0.625, 0.5), Vector2(0.671875, 0.59375)}},
+    {'.', {Vector2(0.703125, 0.5), Vector2(0.75, 0.59375)}},
+    {':', {Vector2(0.78125, 0.5), Vector2(0.828125, 0.59375)}},
+    {'!', {Vector2(0.859375, 0.5), Vector2(0.90625, 0.59375)}},
+    {'?', {Vector2(0.9375, 0.5), Vector2(0.984375, 0.59375)}},
+
+    {'=', {Vector2(0.0, 0.625), Vector2(0.046875, 0.875)}},
+    {'-', {Vector2(0.078125, 0.625), Vector2(0.125, 0.875)}},
+    {'/', {Vector2(0.15625, 0.625), Vector2(0.203125, 0.875)}},
+    {'*', {Vector2(0.234375, 0.625), Vector2(0.28125, 0.875)}},
+    {'(', {Vector2(0.3125, 0.625), Vector2(0.359375, 0.875)}},
+    {')', {Vector2(0.390625, 0.625), Vector2(0.4375, 0.875)}},
+    {'%', {Vector2(0.46875, 0.625), Vector2(0.515625, 0.875)}},
+    {'$', {Vector2(0.546875, 0.625), Vector2(0.59375, 0.875)}},
+    {'<', {Vector2(0.625, 0.625), Vector2(0.671875, 0.875)}},
+    {'>', {Vector2(0.703125, 0.625), Vector2(0.75, 0.875)}},
+    {'\'', {Vector2(0.78125, 0.625), Vector2(0.828125, 0.875)}},
+    {'~', {Vector2(0.859375, 0.625), Vector2(0.90625, 0.875)}},
+    {'@', {Vector2(0.9375, 0.625), Vector2(0.984375, 0.875)}},
+
+    {' ', {Vector2(0.0, 0.734375), Vector2(0.046875, 0.828125)}},
+    {'0', {Vector2(0.078125, 0.125), Vector2(0.125, 0.21875)}}
+};
